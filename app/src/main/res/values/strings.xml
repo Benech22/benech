@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">AndroidERestaurant</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_category">CategoryActivity</string>
+</resources>

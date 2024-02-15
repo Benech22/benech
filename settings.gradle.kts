@@ -15,3 +15,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "AndroidERestaurant"
 include(":app")
+include(":app:myapplication3")

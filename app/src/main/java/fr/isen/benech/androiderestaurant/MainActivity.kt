@@ -5,131 +5,145 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.Surface
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import fr.isen.benech.androiderestaurant.ui.theme.AndroidERestaurantTheme
 
 class HomeActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             AndroidERestaurantTheme {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = Color(android.graphics.Color.parseColor("#245713"))
+                val Context = LocalContext.current
+                // Use Box to set the background image for the entire app
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
                 ) {
-                    Greeting(::onMenuClicked)
+
+
+
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(16.dp),
+                        verticalArrangement = Arrangement.Top,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        // Image of a pizza with clip and content scale
+
+                        Text(
+                            text = "Bienvenue chez MOUNIER",
+                            style = MaterialTheme.typography.displayMedium,
+                            modifier = Modifier
+                                .padding(8.dp)
+                                .padding(8.dp)
+
+                        )
+
+
+
+
+                        // Bouttons pour entré, plats, desserts
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(8.dp),
+                            verticalArrangement = Arrangement.SpaceBetween
+                        ) {
+
+                            Button(
+                                onClick = {
+
+                                    showToast("Entrées clicked")
+
+                                    val intent = Intent(this@HomeActivity, CategoryActivity::class.java)
+                                    intent.putExtra("menuType", "Entrées")
+                                    intent.putExtra("title", "Entrées")
+                                    Context.startActivity(intent)
+                                },
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = Color.Blue
+                                ),
+                                modifier = Modifier
+                                    .size(110.dp)
+                                    .align(Alignment.CenterHorizontally)
+                            ) {
+                                Text("Entrées")
+                            }
+                            // I want to add spaces between the buttons
+                            Spacer(modifier = Modifier.width(8.dp))
+
+                            Button(
+                                onClick = {
+                                    // Handle button click for PLAT
+                                    showToast("Plats clicked")
+
+                                    val intent = Intent(this@HomeActivity, CategoryActivity::class.java)
+                                    intent.putExtra("menuType", "Plats")
+                                    intent.putExtra("title", "Plats") // or "Plats" or "Dessert"
+                                    Context.startActivity(intent)
+
+                                },
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = Color.Blue
+                                ),
+                                modifier = Modifier
+                                    .size(110.dp)
+                                    .align(Alignment.CenterHorizontally)
+                            ) {
+                                Text("Plats")
+                            }
+
+                            Button(
+                                onClick = {
+                                    // Gérer le clic sur le bouton DESSERT
+                                    showToast("Desserts cliqués")
+
+                                    val intent = Intent(this@HomeActivity, CategoryActivity::class.java)
+                                    intent.putExtra("menuType", "Desserts")
+                                    intent.putExtra("title", "Desserts") // ou "Plats" ou "Dessert"
+
+                                    Context.startActivity(intent)
+                                },
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = Color.Blue
+                                ),
+                                modifier = Modifier
+                                    .size(110.dp)
+                                    .align(Alignment.CenterHorizontally)
+                            )
+                            {
+                                Text("Desserts")
+                            }
+
+
+
+                        }
+                    }
                 }
             }
         }
     }
 
-    private fun onMenuClicked(category: String) {
-        Toast.makeText(this, category, Toast.LENGTH_SHORT).show()
-        val intent = Intent(this, CategoryActivity::class.java).apply {
-            putExtra(CategoryActivity.CATEGORY_KEY, category)
-        }
-        startActivity(intent)
-    }
-}
-
-@Composable
-fun Greeting(onMenuClicked: (String) -> Unit) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(color = Color(android.graphics.Color.parseColor("#245713")))
-            .padding(16.dp)
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            horizontalArrangement = Arrangement.End,
-            verticalAlignment = Alignment.Top
-        ) {
-            // Contenu de la rangée à l'extrémité supérieure
-            // Ajoutez vos éléments ici si nécessaire
-        }
-
-        Spacer(modifier = Modifier.height(16.dp)) // Ajout d'un espace vertical
-
-        Text(
-            text = "Bienvenue chez Mounier",
-            color = Color.White,
-            fontSize = 28.sp, // Augmenter la taille du texte
-            fontWeight = FontWeight.Bold, // Mettre en gras le texte
-            modifier = Modifier
-                .padding(16.dp)
-                .fillMaxWidth()
-                .align(Alignment.CenterHorizontally)
-        )
-
-
-        Spacer(modifier = Modifier.height(16.dp)) // Ajout d'un espace vertical
-
-        // Nouvelle colonne avec les boutons "Entrée", "Plat" et "Dessert"
-        CategoriesButtons(onMenuClicked)
-    }
-}
-
-@Composable
-fun CategoriesButtons(onMenuClicked: (String) -> Unit) {
-    Column(
-        modifier = Modifier
-            .padding(16.dp)
-            .background(color = Color(android.graphics.Color.parseColor("#245713")))
-            .fillMaxWidth()
-    ) {
-        // Bouton entrée
-        OutlinedButton(
-            onClick = { onMenuClicked("Entrée") },
-            modifier = Modifier
-                .padding(16.dp)
-                .fillMaxWidth()
-        ) {
-            Text(text = "Entrée", color = Color.White, fontSize = 20.sp)
-        }
-
-        Spacer(modifier = Modifier.height(8.dp)) // Ajout d'un espace vertical
-
-        // Bouton Plats
-        OutlinedButton(
-            onClick = { onMenuClicked("Plat") },
-            modifier = Modifier
-                .padding(16.dp)
-                .fillMaxWidth()
-        ) {
-            Text(text = "Plat", color = Color.White, fontSize = 20.sp)
-        }
-
-        Spacer(modifier = Modifier.height(8.dp)) // Ajout d'un espace vertical
-
-        // Bouton Dessert
-        OutlinedButton(
-            onClick = { onMenuClicked("Dessert") },
-            modifier = Modifier
-                .padding(16.dp)
-                .fillMaxWidth()
-        ) {
-            Text(text = "Dessert", color = Color.White, fontSize = 20.sp)
-        }
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 }

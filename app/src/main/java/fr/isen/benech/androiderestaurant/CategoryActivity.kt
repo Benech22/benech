@@ -41,10 +41,6 @@ import com.google.gson.Gson
 import fr.isen.benech.androiderestaurant.ui.theme.AndroidERestaurantTheme
 import org.json.JSONObject
 
-
-
-
-
 sealed class Category(val name: String, val dishes: List<Plat>)
 
 data class Plat(val name: String, val description: String)
@@ -77,8 +73,6 @@ object Desserts : Category(
 
 class CategoryActivity : ComponentActivity() {
 
-
-
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -98,7 +92,7 @@ class CategoryActivity : ComponentActivity() {
                     val itemsState = remember {
                         mutableStateListOf<Items>()
                     }
-                    fetchdata(itemsState)
+                    fetchData(itemsState)
                     Scaffold(
                         topBar = {
                             // Barre d'applications avec un bouton de retour
@@ -112,23 +106,18 @@ class CategoryActivity : ComponentActivity() {
                             )
                         },
                         // Contenu principal de la page
-                        content = { padding -> CategoryComponent(padding, category,itemsState, ::goToDetail) }
+                        content = { padding -> CategoryComponent(padding, category, itemsState, ::goToDetail) }
                     )
                 }
             }
         }
-
-
     }
-
 
     companion object {
         const val CATEGORY_KEY = "category"
     }
 
-
-
-    private fun fetchdata(itemsState: SnapshotStateList<Items>) {
+    private fun fetchData(itemsState: SnapshotStateList<Items>) {
         val url = "http://test.api.catering.bluecodegames.com/menu"
         val jsonObject = JSONObject()
         jsonObject.put("id_shop", "1")
@@ -136,28 +125,23 @@ class CategoryActivity : ComponentActivity() {
             Request.Method.POST,
             url,
             jsonObject,
-            {
-                Log.d("PlatActivity", "les données en brut : $it")
-                val result = Gson().fromJson(it.toString(), ListMenu::class.java)
-                // Ajout des éléments à la liste itemsState
+            { response ->
+                val result = Gson().fromJson(response.toString(), ListMenu::class.java)
                 itemsState.addAll(result.data[0].items)
             },
-            {
-                Log.e("PlatActivity", "error : $it")
-            })
+            { error ->
+                Log.e("CategoryActivity", "Error: $error")
+            }
+        )
         val requestQueue = Volley.newRequestQueue(this)
         requestQueue.add(jsonObjectRequest)
     }
 
-
     private fun goToDetail(plat: Plat) {
         val intent = Intent(this, CategoryActivity::class.java)
         startActivity(intent)
-
     }
 }
-
-
 
 @Composable
 fun CategoryComponent(

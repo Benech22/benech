@@ -32,7 +32,7 @@ class HomeActivity : ComponentActivity() {
         setContent {
             AndroidERestaurantTheme {
                 val Context = LocalContext.current
-                // Use Box to set the background image for the entire app
+
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
@@ -47,7 +47,7 @@ class HomeActivity : ComponentActivity() {
                         verticalArrangement = Arrangement.Top,
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        // Image of a pizza with clip and content scale
+
 
                         Text(
                             text = "Bienvenue chez MOUNIER",
